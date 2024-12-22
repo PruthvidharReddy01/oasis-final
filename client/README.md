@@ -1,6 +1,6 @@
 # Getting Started with Vite
 
-OASIS client side was bootstrapped with [Vite](https://vitejs.dev/).
+SkyOffice's client side was bootstrapped with [Vite](https://vitejs.dev/).
 
 ## Available Scripts
 

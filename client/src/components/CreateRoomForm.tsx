@@ -1,80 +1,59 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import TextField from '@mui/material/TextField'
+import InputAdornment from '@mui/material/InputAdornment'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
-import { IRoomData } from "../../../types/Rooms";
-import { useAppSelector } from "../hooks";
+import { IRoomData } from '../../types/Rooms'
+import { useAppSelector } from '../hooks'
 
-import phaserGame from "../PhaserGame";
-import Bootstrap from "../scenes/Bootstrap";
+import phaserGame from '../PhaserGame'
+import Bootstrap from '../scenes/Bootstrap'
 
 const CreateRoomFormWrapper = styled.form`
   display: flex;
   flex-direction: column;
   width: 320px;
   gap: 20px;
-`;
+`
 
 export const CreateRoomForm = () => {
   const [values, setValues] = useState<IRoomData>({
-    name: "",
-    description: "",
+    name: '',
+    description: '',
     password: null,
     autoDispose: true,
-  });
-  const [showPassword, setShowPassword] = useState(false);
-  const [nameFieldEmpty, setNameFieldEmpty] = useState(false);
-  const [descriptionFieldEmpty, setDescriptionFieldEmpty] = useState(false);
-  const lobbyJoined = useAppSelector((state) => state.room.lobbyJoined);
+  })
+  const [showPassword, setShowPassword] = useState(false)
+  const [nameFieldEmpty, setNameFieldEmpty] = useState(false)
+  const [descriptionFieldEmpty, setDescriptionFieldEmpty] = useState(false)
+  const lobbyJoined = useAppSelector((state) => state.room.lobbyJoined)
 
-  const handleChange =
-    (prop: keyof IRoomData) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [prop]: event.target.value });
-    };
+  const handleChange = (prop: keyof IRoomData) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValues({ ...values, [prop]: event.target.value })
+  }
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const isValidName = values.name !== "";
-    const isValidDescription = values.description !== "";
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const isValidName = values.name !== ''
+    const isValidDescription = values.description !== ''
 
-    if (isValidName === nameFieldEmpty) setNameFieldEmpty(!nameFieldEmpty);
+    if (isValidName === nameFieldEmpty) setNameFieldEmpty(!nameFieldEmpty)
     if (isValidDescription === descriptionFieldEmpty)
-      setDescriptionFieldEmpty(!descriptionFieldEmpty);
+      setDescriptionFieldEmpty(!descriptionFieldEmpty)
 
     // create custom room if name and description are not empty
     if (isValidName && isValidDescription && lobbyJoined) {
-      const bootstrap = phaserGame.scene.keys.bootstrap as Bootstrap;
-
-      try {
-        console.log("this is working");
-        // Create the room using Phaser
-        await bootstrap.network.createCustom(values);
-        bootstrap.launchGame();
-
-        // Post room data to the server
-        const response = await fetch("http://localhost:2567/submitroomdata", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to submit room data to the server");
-        }
-
-        console.log("Room data submitted successfully");
-      } catch (error) {
-        console.error("Error creating room or submitting data:", error);
-      }
+      const bootstrap = phaserGame.scene.keys.bootstrap as Bootstrap
+      bootstrap.network
+        .createCustom(values)
+        .then(() => bootstrap.launchGame())
+        .catch((error) => console.error(error))
     }
-  };
+  }
 
   return (
     <CreateRoomFormWrapper onSubmit={handleSubmit}>
@@ -83,24 +62,30 @@ export const CreateRoomForm = () => {
         variant="outlined"
         autoFocus
         error={nameFieldEmpty}
-        helperText={nameFieldEmpty && "Name is required"}
-        onChange={handleChange("name")}
+        helperText={nameFieldEmpty && 'Name is required'}
+        onChange={handleChange('name')}
         sx={{
-          "& .MuiInputBase-input": {
-            color: "black",
+          '& .MuiInputBase-input': {
+            color: 'black', 
           },
-          "& .MuiFormLabel-root": {
-            color: "black",
+          '& .MuiInputBase-inputMultiline': {
+            color: 'black', 
           },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "primary.main",
+          '& .MuiFormLabel-root': {
+            color: 'black', 
+          },
+          '& .MuiFormHelperText-root': {
+            color: 'black', 
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: 'primary.main', // Border color
             },
-            "&:hover fieldset": {
-              borderColor: "primary.dark",
+            '&:hover fieldset': {
+              borderColor: 'primary.dark', // Border color on hover
             },
-            "&.Mui-focused fieldset": {
-              borderColor: "primary.main",
+            '&.Mui-focused fieldset': {
+              borderColor: 'primary.main', // Border color when focused
             },
           },
         }}
@@ -110,35 +95,41 @@ export const CreateRoomForm = () => {
         label="Description"
         variant="outlined"
         error={descriptionFieldEmpty}
-        helperText={descriptionFieldEmpty && "Description is required"}
+        helperText={descriptionFieldEmpty && 'Description is required'}
         multiline
         rows={4}
-        onChange={handleChange("description")}
+        onChange={handleChange('description')}
         sx={{
-          "& .MuiInputBase-input": {
-            color: "black",
+          '& .MuiInputBase-input': {
+            color: 'black', 
           },
-          "& .MuiFormLabel-root": {
-            color: "black",
+          '& .MuiInputBase-inputMultiline': {
+            color: 'black', 
           },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "primary.main",
+          '& .MuiFormLabel-root': {
+            color: 'black', 
+          },
+          '& .MuiFormHelperText-root': {
+            color: 'black', 
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: 'primary.main', // Border color
             },
-            "&:hover fieldset": {
-              borderColor: "primary.dark",
+            '&:hover fieldset': {
+              borderColor: 'primary.dark', // Border color on hover
             },
-            "&.Mui-focused fieldset": {
-              borderColor: "primary.main",
+            '&.Mui-focused fieldset': {
+              borderColor: 'primary.main', // Border color when focused
             },
           },
         }}
       />
 
       <TextField
-        type={showPassword ? "text" : "password"}
+        type={showPassword ? 'text' : 'password'}
         label="Password (optional)"
-        onChange={handleChange("password")}
+        onChange={handleChange('password')}
         color="secondary"
         InputProps={{
           endAdornment: (
@@ -154,21 +145,27 @@ export const CreateRoomForm = () => {
           ),
         }}
         sx={{
-          "& .MuiInputBase-input": {
-            color: "black",
+          '& .MuiInputBase-input': {
+            color: 'black', // Text color
           },
-          "& .MuiFormLabel-root": {
-            color: "black",
+          '& .MuiInputBase-inputMultiline': {
+            color: 'black', // Text color for multiline
           },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "primary.main",
+          '& .MuiFormLabel-root': {
+            color: 'black', // Label color when not focused
+          },
+          '& .MuiFormLabel-root.Mui-focused': {
+            color: 'black', // Label color when focused
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: 'primary.main', // Border color
             },
-            "&:hover fieldset": {
-              borderColor: "primary.dark",
+            '&:hover fieldset': {
+              borderColor: 'primary.dark', // Border color on hover
             },
-            "&.Mui-focused fieldset": {
-              borderColor: "primary.main",
+            '&.Mui-focused fieldset': {
+              borderColor: 'primary.main', // Border color when focused
             },
           },
         }}
@@ -177,5 +174,5 @@ export const CreateRoomForm = () => {
         Create
       </Button>
     </CreateRoomFormWrapper>
-  );
-};
+  )
+}

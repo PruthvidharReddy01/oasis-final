@@ -21,20 +21,7 @@ export default function Navbar() {
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-4">
-          <button
-            onClick={() => navigate("/login")}
-            className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-500"
-          >
-            Login
-          </button>
-          <button
-            onClick={() => navigate("/register")}
-            className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-purple-500"
-          >
-            Register
-          </button>
-        </div>
+        
       </nav>
     </header>
   );
