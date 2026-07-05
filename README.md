@@ -1,4 +1,4 @@
-# Oasis: A Virtual Metaverse Platform
+# Oasis: A Virtual Metaverse Platform (Built over Office)
 
 **Oasis** is a next-generation virtual platform designed to facilitate immersive experiences for users through real-time interaction and collaboration. Drawing inspiration from platforms like [Zep](https://zep.us) and [Gather](https://gather.town), Oasis provides features such as proximal chat, gamification, video/audio communication, screen sharing, and collaborative tools. Whether for casual socializing or work, Oasis aims to make virtual spaces feel real and engaging.
 
